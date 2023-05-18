@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import pickle
 
 def home(request):
@@ -29,8 +29,24 @@ def result(request):
     embC = int(request.GET['embC'])
     embQ = int(request.GET['embQ'])
     embS = int(request.GET['embS'])
+    print(embC,embQ, embS)
 
-    result = getPredictions(pclass, sex, age, sibsp,
-                            parch, fare, embC, embQ, embS)
+    if (embS==0 & embQ ==0 & embC ==0):
+        return redirect('home')
 
-    return render(request, 'result.html', {'result': result})
+    elif (embC==1 & embQ ==0 & embS ==0):
+        result = getPredictions(pclass, sex, age, sibsp, parch, fare, embC, embQ, embS)
+        return render(request, 'result.html', {'result': result})
+    
+    elif (embQ==1 & embC ==0 & embS ==0):
+        result = getPredictions(pclass, sex, age, sibsp, parch, fare, embC, embQ, embS)
+        return render(request, 'result.html', {'result': result})
+    
+    elif (embS==1 & embQ ==0 & embC ==0):
+        result = getPredictions(pclass, sex, age, sibsp, parch, fare, embC, embQ, embS)
+        return render(request, 'result.html', {'result': result})
+    
+
+
+    else:
+        return redirect('home')
